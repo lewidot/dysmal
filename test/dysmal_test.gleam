@@ -1,13 +1,14 @@
+import dysmal
 import gleeunit
 
 pub fn main() -> Nil {
   gleeunit.main()
 }
 
-// gleeunit test functions end in `_test`
-pub fn hello_world_test() {
-  let name = "Joe"
-  let greeting = "Hello, " <> name <> "!"
+pub fn from_string_test() {
+  let actual =
+    dysmal.from_string("1234.56")
+    |> dysmal.to_string
 
-  assert greeting == "Hello, Joe!"
+  assert actual == "1234.56"
 }
