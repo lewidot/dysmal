@@ -23,3 +23,13 @@ pub fn from_string_with_opts_test() {
 
   assert actual == "1234.567899"
 }
+
+pub fn add_test() {
+  let actual =
+    "1234.56"
+    |> dysmal.from_string
+    |> dysmal.add(dysmal.from_string("100"))
+    |> dysmal.to_string
+
+  assert actual == "1334.56"
+}
