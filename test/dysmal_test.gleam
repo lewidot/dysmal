@@ -19,7 +19,6 @@ pub fn from_string_with_opts_test() {
       "1234.56789999",
       dysmal.Opts(6, dysmal.RoundFloor),
     )
-    |> echo
     |> dysmal.to_string
 
   assert actual == "1234.567899"
