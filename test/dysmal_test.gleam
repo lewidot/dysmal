@@ -43,13 +43,22 @@ pub fn from_float_with_opts_test() {
   assert actual == "1234.5679"
 }
 
-// / ```gleam
-// /// 1234.56781111
-// /// |> dysmal.from_float_with_opts(dysmal.Opts(4, dysmal.RoundCeiling))
-// /// // -> #(12345679, -4)
-// /// ```
-// ///
-// ///
+pub fn from_int_test() {
+  let actual =
+    dysmal.from_int(1234)
+    |> dysmal.to_string
+
+  assert actual == "1234.0"
+}
+
+pub fn from_int_with_opts_test() {
+  let actual =
+    dysmal.from_int_with_opts(1234, dysmal.Opts(6, dysmal.RoundCeiling))
+    |> dysmal.to_string
+
+  assert actual == "1234.0"
+}
+
 pub fn add_test() {
   let actual =
     "1234.56"
