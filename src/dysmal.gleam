@@ -112,6 +112,21 @@ pub fn to_string(decimal: Decimal) -> String
 @external(erlang, "decimal", "add")
 pub fn add(x: Decimal, y: Decimal) -> Decimal
 
+/// Subtract one Decimal from another.
+///
+/// # Examples
+///
+/// ```gleam
+/// "1234.56"
+/// |> dysmal.from_string
+/// |> dysmal.subtract(dysmal.from_string("100"))
+/// |> dysmal.to_string
+/// // -> "1134.56"
+/// ```
+///
+@external(erlang, "decimal", "sub")
+pub fn subtract(x: Decimal, y: Decimal) -> Decimal
+
 // Types
 
 /// Representation of a decimal number.
