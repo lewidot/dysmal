@@ -29,6 +29,33 @@ pub fn from_string_with_opts(value: String, opts: Opts) -> Decimal {
   to_decimal_raw(value, opts_to_dict(opts))
 }
 
+/// Create a new Decimal from a Float.
+///
+/// # Examples
+///
+/// ```gleam
+/// dysmal.from_float(1234.56)
+/// // -> #(123456, -2)
+/// ```
+///
+pub fn from_float(value: Float) -> Decimal {
+  to_decimal_raw(value, opts_to_dict(default_opts()))
+}
+
+/// Create a new Decimal from a Float with precision and rounding options.
+///
+/// # Examples
+///
+/// ```gleam
+/// 1234.56781111
+/// |> dysmal.from_float_with_opts(dysmal.Opts(4, dysmal.RoundCeiling))
+/// // -> #(12345679, -4)
+/// ```
+///
+pub fn from_float_with_opts(value: Float, opts: Opts) -> Decimal {
+  to_decimal_raw(value, opts_to_dict(opts))
+}
+
 /// Convert a Decimal to a String.
 ///
 /// # Examples
