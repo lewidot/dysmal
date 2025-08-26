@@ -1,13 +1,64 @@
 import gleam/dict.{type Dict}
 
-@external(erlang, "erlang", "binary_to_atom")
-fn binary_to_atom(binary: String) -> atom
+// Public API
 
+/// Create a new Decimal from a String.
+///
+/// # Examples
+///
+/// ```gleam
+/// dysmal.from_string("1234.56")
+/// // -> #(123456, -2)
+/// ```
+///
+pub fn from_string(value: String) -> Decimal {
+  to_decimal_raw(value, opts_to_dict(default_opts()))
+}
+
+/// Create a new Decimal from a String with precision and rounding options.
+///
+/// # Examples
+///
+/// ```gleam
+/// "1234.56789999"
+/// |> dysmal.from_string_with_opts(dysmal.Opts(6, dysmal.RoundFloor))
+/// // -> #(1234567899, -6)
+/// ```
+///
+pub fn from_string_with_opts(value: String, opts: Opts) -> Decimal {
+  to_decimal_raw(value, opts_to_dict(opts))
+}
+
+/// Convert a Decimal to a String.
+///
+/// # Examples
+///
+/// ```gleam
+/// "1234.56"
+/// |> dysmal.from_string
+/// |> dysmal.to_string
+/// // -> "1234.56"
+/// ```
+///
 @external(erlang, "decimal", "to_binary")
-fn to_binary(decimal: Decimal) -> String
+pub fn to_string(decimal: Decimal) -> String
 
-@external(erlang, "decimal", "to_decimal")
-fn to_decimal_raw(value: a, opts: Dict(OptsKey, Int)) -> Decimal
+/// Add two Decimal numbers together.
+///
+/// # Examples
+///
+/// ```gleam
+/// "1234.56"
+/// |> dysmal.from_string
+/// |> dysmal.add(dysmal.from_string("100"))
+/// |> dysmal.to_string
+/// // -> "1334.56"
+/// ```
+///
+@external(erlang, "decimal", "add")
+pub fn add(x: Decimal, y: Decimal) -> Decimal
+
+// Types
 
 /// Representation of a decimal number.
 ///
@@ -71,44 +122,10 @@ fn rounding_to_atom(rounding: RoundingAlgorithm) -> atom {
   }
 }
 
-/// Create a new Decimal from a string.
-///
-/// # Examples
-///
-/// ```gleam
-/// dysmal.from_string("1234.56")
-/// // -> #(123456, -2)
-/// ```
-///
-pub fn from_string(value: String) -> Decimal {
-  to_decimal_raw(value, opts_to_dict(default_opts()))
-}
+// FFI helper functions
 
-/// Create a new Decimal from a String with precision and rounding options.
-///
-/// # Examples
-///
-/// ```gleam
-/// "1234.56789999"
-/// |> dysmal.from_string_with_opts(dysmal.Opts(6, dysmal.RoundFloor))
-/// // -> #(1234567899, -6)
-/// ```
-///
-pub fn from_string_with_opts(value: String, opts: Opts) -> Decimal {
-  to_decimal_raw(value, opts_to_dict(opts))
-}
+@external(erlang, "erlang", "binary_to_atom")
+fn binary_to_atom(binary: String) -> atom
 
-/// Convert a Decimal to a String.
-///
-/// # Examples
-///
-/// ```gleam
-/// "1234.56"
-/// |> dysmal.from_string
-/// |> dysmal.to_string
-/// // -> "1234.56"
-/// ```
-///
-pub fn to_string(decimal: Decimal) -> String {
-  to_binary(decimal)
-}
+@external(erlang, "decimal", "to_decimal")
+fn to_decimal_raw(value: a, opts: Dict(OptsKey, Int)) -> Decimal
