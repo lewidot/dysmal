@@ -68,3 +68,13 @@ pub fn add_test() {
 
   assert actual == "1334.56"
 }
+
+pub fn subtract_test() {
+  let actual =
+    "1234.56"
+    |> dysmal.from_string
+    |> dysmal.subtract(dysmal.from_string("100"))
+    |> dysmal.to_string
+
+  assert actual == "1134.56"
+}
