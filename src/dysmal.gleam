@@ -7,7 +7,7 @@ fn binary_to_atom(binary: String) -> atom
 fn to_binary(decimal: Decimal) -> String
 
 @external(erlang, "decimal", "to_decimal")
-fn to_decimal_raw(value: a, opts: Dict(atom, b)) -> Decimal
+fn to_decimal_raw(value: a, opts: Dict(OptsKey, Int)) -> Decimal
 
 /// Representation of a decimal number.
 ///
@@ -25,19 +25,26 @@ fn default_opts() -> Opts {
   Opts(2, RoundHalfUp)
 }
 
+/// Dict keys for the opts argument for `to_decimal/2`.
+///
+type OptsKey {
+  Precision
+  Rounding
+}
+
 /// Convert Opts type to a Dict.
 ///
-fn opts_to_dict(opts: Opts) -> Dict(atom, Int) {
+fn opts_to_dict(opts: Opts) -> Dict(OptsKey, Int) {
   // Extract the values from Opts
   let Opts(precision, rounding) = opts
 
   // Convert `rounding` to an Erlang atom
   let rounding_atom = rounding_to_atom(rounding)
 
-  // Build the dict that `to_decimal/2` function expects
+  // Build the dict that the `to_decimal/2` function expects
   dict.new()
-  |> dict.insert(binary_to_atom("precision"), precision)
-  |> dict.insert(binary_to_atom("rounding"), rounding_atom)
+  |> dict.insert(Precision, precision)
+  |> dict.insert(Rounding, rounding_atom)
 }
 
 // Rounding algorithm type
