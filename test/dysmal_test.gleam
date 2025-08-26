@@ -24,6 +24,32 @@ pub fn from_string_with_opts_test() {
   assert actual == "1234.567899"
 }
 
+pub fn from_float_test() {
+  let actual =
+    dysmal.from_float(1234.56)
+    |> dysmal.to_string
+
+  assert actual == "1234.56"
+}
+
+pub fn from_float_with_opts_test() {
+  let actual =
+    dysmal.from_float_with_opts(
+      1234.56781111,
+      dysmal.Opts(4, dysmal.RoundCeiling),
+    )
+    |> dysmal.to_string
+
+  assert actual == "1234.5679"
+}
+
+// / ```gleam
+// /// 1234.56781111
+// /// |> dysmal.from_float_with_opts(dysmal.Opts(4, dysmal.RoundCeiling))
+// /// // -> #(12345679, -4)
+// /// ```
+// ///
+// ///
 pub fn add_test() {
   let actual =
     "1234.56"
