@@ -127,6 +127,21 @@ pub fn add(x: Decimal, y: Decimal) -> Decimal
 @external(erlang, "decimal", "sub")
 pub fn subtract(x: Decimal, y: Decimal) -> Decimal
 
+/// Multiply one Decimal by another.
+///
+/// # Examples
+///
+/// ```gleam
+/// "1234.56"
+/// |> dysmal.from_string
+/// |> dysmal.multiply(dysmal.from_string("2))
+/// |> dysmal.to_string
+/// // -> "2469.12
+/// ```
+///
+@external(erlang, "decimal", "mult")
+pub fn multiply(x: Decimal, y: Decimal) -> Decimal
+
 // Types
 
 /// Representation of a decimal number.

@@ -78,3 +78,13 @@ pub fn subtract_test() {
 
   assert actual == "1134.56"
 }
+
+pub fn multiply_test() {
+  let actual =
+    "1234.56"
+    |> dysmal.from_string
+    |> dysmal.multiply(dysmal.from_string("2"))
+    |> dysmal.to_string
+
+  assert actual == "2469.12"
+}
