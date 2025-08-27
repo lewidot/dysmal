@@ -295,8 +295,6 @@ fn opts_to_dict(opts: Opts) -> Dict(OptsKey, Int) {
 pub type RoundingAlgorithm {
   RoundHalfUp
   RoundHalfDown
-  RoundHalfEven
-  RoundUp
   RoundDown
   RoundCeiling
   RoundFloor
@@ -307,8 +305,6 @@ fn rounding_to_atom(rounding: RoundingAlgorithm) -> atom {
   case rounding {
     RoundHalfUp -> binary_to_atom("round_half_up")
     RoundHalfDown -> binary_to_atom("round_half_down")
-    RoundHalfEven -> binary_to_atom("round_half_even")
-    RoundUp -> binary_to_atom("round_up")
     RoundDown -> binary_to_atom("round_down")
     RoundCeiling -> binary_to_atom("round_ceiling")
     RoundFloor -> binary_to_atom("round_floor")
