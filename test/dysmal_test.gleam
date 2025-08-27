@@ -13,6 +13,14 @@ pub fn from_string_test() {
   assert actual == "1234.56"
 }
 
+pub fn zero_from_string_test() {
+  let actual =
+    dysmal.from_string("0")
+    |> dysmal.to_string
+
+  assert actual == "0.0"
+}
+
 pub fn from_string_with_opts_test() {
   let actual =
     dysmal.from_string_with_opts(
@@ -87,4 +95,38 @@ pub fn multiply_test() {
     |> dysmal.to_string
 
   assert actual == "2469.12"
+}
+
+pub fn divide_test() {
+  let assert Ok(result) =
+    "1234.56"
+    |> dysmal.from_string
+    |> dysmal.divide(dysmal.from_string("2"))
+
+  let actual = dysmal.to_string(result)
+
+  assert actual == "617.28"
+}
+
+pub fn divide_by_zero_test() {
+  let actual =
+    "1234.56"
+    |> dysmal.from_string
+    |> dysmal.divide(dysmal.from_string("0"))
+
+  assert actual == Error(Nil)
+}
+
+pub fn divide_with_opts_test() {
+  let assert Ok(result) =
+    "1000"
+    |> dysmal.from_string
+    |> dysmal.divide_with_opts(
+      dysmal.from_string("3"),
+      dysmal.Opts(3, dysmal.RoundCeiling),
+    )
+
+  let actual = dysmal.to_string(result)
+
+  assert actual == "333.334"
 }

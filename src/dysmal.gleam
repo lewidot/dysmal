@@ -136,11 +136,59 @@ pub fn subtract(x: Decimal, y: Decimal) -> Decimal
 /// |> dysmal.from_string
 /// |> dysmal.multiply(dysmal.from_string("2))
 /// |> dysmal.to_string
-/// // -> "2469.12
+/// // -> "2469.12"
 /// ```
 ///
 @external(erlang, "decimal", "mult")
 pub fn multiply(x: Decimal, y: Decimal) -> Decimal
+
+@external(erlang, "decimal", "divide")
+fn divide_ffi(x: Decimal, y: Decimal, opts: Dict(OptsKey, Int)) -> Decimal
+
+/// Divide one Decimal by another.
+///
+/// An Error is returned if the divisor is zero.
+/// # Examples
+///
+/// ```gleam
+/// "1234.56"
+/// |> dysmal.from_string
+/// |> dysmal.divide(dysmal.from_string("2"))
+/// // -> Ok(#(61728, -2))
+/// ```
+///
+pub fn divide(x: Decimal, y: Decimal) -> Result(Decimal, Nil) {
+  case to_string(y) {
+    "0.0" -> Error(Nil)
+    _ -> Ok(divide_ffi(x, y, opts_to_dict(default_opts())))
+  }
+}
+
+/// Divide one Decimal by another with precision and rounding options.
+///
+/// An Error is returned if the divisor is zero.
+/// # Examples
+///
+/// ```gleam
+/// "1000"
+/// |> dysmal.from_string
+/// |> dysmal.divide_with_opts(
+///   dysmal.from_string("3"),
+///   dysmal.Opts(3, dysmal.RoundCeiling),
+/// )
+/// // -> Ok(#(333334, -3))
+/// ```
+///
+pub fn divide_with_opts(
+  x: Decimal,
+  y: Decimal,
+  opts: Opts,
+) -> Result(Decimal, Nil) {
+  case to_string(y) {
+    "0.0" -> Error(Nil)
+    _ -> Ok(divide_ffi(x, y, opts_to_dict(opts)))
+  }
+}
 
 // Types
 
