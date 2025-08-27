@@ -237,6 +237,20 @@ pub fn square_root_with_opts(x: Decimal, opts: Opts) -> Result(Decimal, Nil) {
   }
 }
 
+/// Check if a Decimal is zero.
+///
+/// # Examples
+///
+/// ```gleam
+/// "1234.56"
+/// |> dysmal.from_string
+/// |> dysmal.is_zero
+/// // -> False
+/// ```
+///
+@external(erlang, "decimal", "is_zero")
+pub fn is_zero(x: Decimal) -> Bool
+
 // Types
 
 /// Representation of a decimal number.

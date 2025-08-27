@@ -169,3 +169,21 @@ pub fn negative_square_root_test() {
 
   assert actual == Error(Nil)
 }
+
+pub fn is_zero_false_test() {
+  let actual =
+    "1234"
+    |> dysmal.from_string
+    |> dysmal.is_zero
+
+  assert actual == False
+}
+
+pub fn is_zero_true_test() {
+  let actual =
+    "0"
+    |> dysmal.from_string
+    |> dysmal.is_zero
+
+  assert actual == True
+}
