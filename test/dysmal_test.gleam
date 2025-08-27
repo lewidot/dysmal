@@ -187,3 +187,21 @@ pub fn is_zero_true_test() {
 
   assert actual == True
 }
+
+pub fn round_test() {
+  let actual =
+    "333.33"
+    |> dysmal.from_string
+    |> dysmal.round(dysmal.Opts(1, dysmal.RoundCeiling))
+    |> dysmal.to_string
+
+  assert actual == "333.4"
+
+  let actual_2 =
+    "1234.999999"
+    |> dysmal.from_string_with_opts(dysmal.Opts(6, dysmal.RoundHalfUp))
+    |> dysmal.round(dysmal.Opts(2, dysmal.RoundFloor))
+    |> dysmal.to_string
+
+  assert actual_2 == "1234.99"
+}

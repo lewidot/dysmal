@@ -251,6 +251,21 @@ pub fn square_root_with_opts(x: Decimal, opts: Opts) -> Result(Decimal, Nil) {
 @external(erlang, "decimal", "is_zero")
 pub fn is_zero(x: Decimal) -> Bool
 
+/// Round a Decimal with precision and rounding options.
+///
+/// # Examples
+///
+/// ```gleam
+/// "333.33"
+/// |> dysmal.from_string
+/// |> dysmal.round(dysmal.Opts(1, dysmal.RoundCeiling))
+/// // -> #(3334, -1)
+/// ```
+///
+pub fn round(x: Decimal, opts: Opts) -> Decimal {
+  round_ffi(opts.rounding, x, opts.precision)
+}
+
 // Types
 
 /// Representation of a decimal number.
@@ -318,3 +333,10 @@ fn binary_to_atom(binary: String) -> atom
 
 @external(erlang, "decimal", "to_decimal")
 fn to_decimal_ffi(value: a, opts: Dict(OptsKey, Int)) -> Decimal
+
+@external(erlang, "decimal", "round")
+fn round_ffi(
+  rounding: RoundingAlgorithm,
+  decimal: Decimal,
+  precision: Int,
+) -> Decimal
