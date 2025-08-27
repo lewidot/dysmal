@@ -1,4 +1,5 @@
 import gleam/dict.{type Dict}
+import gleam/string
 
 // Public API
 
@@ -148,6 +149,7 @@ fn divide_ffi(x: Decimal, y: Decimal, opts: Dict(OptsKey, Int)) -> Decimal
 /// Divide one Decimal by another.
 ///
 /// An Error is returned if the divisor is zero.
+///
 /// # Examples
 ///
 /// ```gleam
@@ -167,6 +169,7 @@ pub fn divide(x: Decimal, y: Decimal) -> Result(Decimal, Nil) {
 /// Divide one Decimal by another with precision and rounding options.
 ///
 /// An Error is returned if the divisor is zero.
+///
 /// # Examples
 ///
 /// ```gleam
@@ -187,6 +190,50 @@ pub fn divide_with_opts(
   case to_string(y) {
     "0.0" -> Error(Nil)
     _ -> Ok(divide_ffi(x, y, opts_to_dict(opts)))
+  }
+}
+
+@external(erlang, "decimal", "sqrt")
+fn sqrt_ffi(x: Decimal, opts: Dict(OptsKey, Int)) -> Decimal
+
+/// Returns the square root of a Decimal.
+///
+/// An Error is returned if the number is less than zero.
+///
+/// # Examples
+///
+/// ```gleam
+/// "1000"
+/// |> dysmal.from_string
+/// |> dysmal.square_root
+/// // -> Ok(#(316, -1))
+/// ```
+///
+pub fn square_root(x: Decimal) -> Result(Decimal, Nil) {
+  let x_string = to_string(x)
+  case string.starts_with(x_string, "-") {
+    True -> Error(Nil)
+    False -> Ok(sqrt_ffi(x, opts_to_dict(default_opts())))
+  }
+}
+
+/// Returns the square root of a Decimal with precision and rounding options.
+///
+/// An Error is returned if the number is less than zero.
+///
+/// # Examples
+///
+/// ```gleam
+///  "1234"
+/// |> dysmal.from_string
+/// |> dysmal.square_root_with_opts(dysmal.Opts(4, dysmal.RoundCeiling))
+/// // -> Ok(#(35128, -3))
+/// ```
+///
+pub fn square_root_with_opts(x: Decimal, opts: Opts) -> Result(Decimal, Nil) {
+  case to_string(x) {
+    "0.0" -> Error(Nil)
+    _ -> Ok(sqrt_ffi(x, opts_to_dict(opts)))
   }
 }
 
