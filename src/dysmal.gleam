@@ -1,4 +1,5 @@
 import gleam/dict.{type Dict}
+import gleam/order
 import gleam/string
 
 // Public API
@@ -266,6 +267,39 @@ pub fn round(x: Decimal, opts: Opts) -> Decimal {
   round_ffi(opts.rounding, x, opts.precision)
 }
 
+/// Compares two Decimals, returning an order.
+///
+/// # Examples
+///
+/// ```gleam
+/// let x = dysmal.from_string("333.33")
+/// let y = dysmal.from_string("555.55")
+/// dysmal.compare(x, y)
+/// // -> order.Gt
+/// ```
+///
+/// ```gleam
+/// let x = dysmal.from_string("555.55")
+/// let y = dysmal.from_string("333.33")
+/// dysmal.compare(x, y)
+/// // -> order.Lt
+/// ```
+///
+/// ```gleam
+/// let x = dysmal.from_string("333.33")
+/// let y = dysmal.from_string("333.33")
+/// dysmal.compare(x, y)
+/// // -> order.Eq
+/// ```
+///
+pub fn compare(x: Decimal, y: Decimal) -> order.Order {
+  case fast_cmp_ffi(x, y) {
+    1 -> order.Gt
+    -1 -> order.Lt
+    _ -> order.Eq
+  }
+}
+
 // Types
 
 /// Representation of a decimal number.
@@ -340,3 +374,6 @@ fn round_ffi(
   decimal: Decimal,
   precision: Int,
 ) -> Decimal
+
+@external(erlang, "decimal", "fast_cmp")
+pub fn fast_cmp_ffi(x: Decimal, y: Decimal) -> Int

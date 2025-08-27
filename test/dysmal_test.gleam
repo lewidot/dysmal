@@ -1,4 +1,5 @@
 import dysmal
+import gleam/order
 import gleeunit
 
 pub fn main() -> Nil {
@@ -204,4 +205,18 @@ pub fn round_test() {
     |> dysmal.to_string
 
   assert actual_2 == "1234.99"
+}
+
+pub fn compare_test() {
+  let a = dysmal.from_string("333.33")
+  let b = dysmal.from_string("555.55")
+  assert dysmal.compare(a, b) == order.Lt
+
+  let c = dysmal.from_string("555.55")
+  let d = dysmal.from_string("333.33")
+  assert dysmal.compare(c, d) == order.Gt
+
+  let e = dysmal.from_string("333.33")
+  let f = dysmal.from_string("333.33")
+  assert dysmal.compare(e, f) == order.Eq
 }
