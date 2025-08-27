@@ -160,9 +160,9 @@ fn divide_ffi(x: Decimal, y: Decimal, opts: Dict(OptsKey, Int)) -> Decimal
 /// ```
 ///
 pub fn divide(x: Decimal, y: Decimal) -> Result(Decimal, Nil) {
-  case to_string(y) {
-    "0.0" -> Error(Nil)
-    _ -> Ok(divide_ffi(x, y, opts_to_dict(default_opts())))
+  case is_zero(y) {
+    True -> Error(Nil)
+    False -> Ok(divide_ffi(x, y, opts_to_dict(default_opts())))
   }
 }
 
@@ -187,9 +187,9 @@ pub fn divide_with_opts(
   y: Decimal,
   opts: Opts,
 ) -> Result(Decimal, Nil) {
-  case to_string(y) {
-    "0.0" -> Error(Nil)
-    _ -> Ok(divide_ffi(x, y, opts_to_dict(opts)))
+  case is_zero(y) {
+    True -> Error(Nil)
+    False -> Ok(divide_ffi(x, y, opts_to_dict(opts)))
   }
 }
 
