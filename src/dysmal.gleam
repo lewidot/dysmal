@@ -376,4 +376,4 @@ fn round_ffi(
 ) -> Decimal
 
 @external(erlang, "decimal", "fast_cmp")
-pub fn fast_cmp_ffi(x: Decimal, y: Decimal) -> Int
+fn fast_cmp_ffi(x: Decimal, y: Decimal) -> Int
