@@ -13,7 +13,7 @@ import gleam/string
 /// ```
 ///
 pub fn from_string(value: String) -> Decimal {
-  to_decimal_raw(value, opts_to_dict(default_opts()))
+  to_decimal_ffi(value, opts_to_dict(default_opts()))
 }
 
 /// Create a new Decimal from a String with precision and rounding options.
@@ -27,7 +27,7 @@ pub fn from_string(value: String) -> Decimal {
 /// ```
 ///
 pub fn from_string_with_opts(value: String, opts: Opts) -> Decimal {
-  to_decimal_raw(value, opts_to_dict(opts))
+  to_decimal_ffi(value, opts_to_dict(opts))
 }
 
 /// Create a new Decimal from a Float.
@@ -40,7 +40,7 @@ pub fn from_string_with_opts(value: String, opts: Opts) -> Decimal {
 /// ```
 ///
 pub fn from_float(value: Float) -> Decimal {
-  to_decimal_raw(value, opts_to_dict(default_opts()))
+  to_decimal_ffi(value, opts_to_dict(default_opts()))
 }
 
 /// Create a new Decimal from a Float with precision and rounding options.
@@ -54,7 +54,7 @@ pub fn from_float(value: Float) -> Decimal {
 /// ```
 ///
 pub fn from_float_with_opts(value: Float, opts: Opts) -> Decimal {
-  to_decimal_raw(value, opts_to_dict(opts))
+  to_decimal_ffi(value, opts_to_dict(opts))
 }
 
 /// Create a new Decimal from an Int.
@@ -67,7 +67,7 @@ pub fn from_float_with_opts(value: Float, opts: Opts) -> Decimal {
 /// ```
 ///
 pub fn from_int(value: Int) -> Decimal {
-  to_decimal_raw(value, opts_to_dict(default_opts()))
+  to_decimal_ffi(value, opts_to_dict(default_opts()))
 }
 
 /// Create a new Decimal from an Int with precision and rounding options.
@@ -81,7 +81,7 @@ pub fn from_int(value: Int) -> Decimal {
 /// ```
 ///
 pub fn from_int_with_opts(value: Int, opts: Opts) -> Decimal {
-  to_decimal_raw(value, opts_to_dict(opts))
+  to_decimal_ffi(value, opts_to_dict(opts))
 }
 
 /// Convert a Decimal to a String.
@@ -307,4 +307,4 @@ fn rounding_to_atom(rounding: RoundingAlgorithm) -> atom {
 fn binary_to_atom(binary: String) -> atom
 
 @external(erlang, "decimal", "to_decimal")
-fn to_decimal_raw(value: a, opts: Dict(OptsKey, Int)) -> Decimal
+fn to_decimal_ffi(value: a, opts: Dict(OptsKey, Int)) -> Decimal
