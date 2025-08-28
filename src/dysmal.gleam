@@ -6,29 +6,38 @@ import gleam/string
 
 /// Create a new Decimal from a String.
 ///
+/// An Error is returned if the string is not a valid decimal number.
+///
 /// # Examples
 ///
 /// ```gleam
 /// dysmal.from_string("1234.56")
-/// // -> #(123456, -2)
+/// // -> Ok(#(123456, -2))
 /// ```
 ///
-pub fn from_string(value: String) -> Decimal {
-  to_decimal_ffi(value, opts_to_dict(default_opts()))
+/// ```gleam
+/// dysmal.from_string("abc")
+/// // -> Error(Nil)
+/// ```
+///
+pub fn from_string(value: String) -> Result(Decimal, Nil) {
+  to_decimal_binary_ffi(value, opts_to_dict(default_opts()))
 }
 
 /// Create a new Decimal from a String with precision and rounding options.
+///
+/// An Error is returned if the string is not a valid decimal number.
 ///
 /// # Examples
 ///
 /// ```gleam
 /// "1234.56789999"
 /// |> dysmal.from_string_with_opts(dysmal.Opts(6, dysmal.RoundFloor))
-/// // -> #(1234567899, -6)
+/// // -> Ok(#(1234567899, -6))
 /// ```
 ///
-pub fn from_string_with_opts(value: String, opts: Opts) -> Decimal {
-  to_decimal_ffi(value, opts_to_dict(opts))
+pub fn from_string_with_opts(value: String, opts: Opts) -> Result(Decimal, Nil) {
+  to_decimal_binary_ffi(value, opts_to_dict(opts))
 }
 
 /// Create a new Decimal from a Float.
@@ -90,8 +99,8 @@ pub fn from_int_with_opts(value: Int, opts: Opts) -> Decimal {
 /// # Examples
 ///
 /// ```gleam
-/// "1234.56"
-/// |> dysmal.from_string
+/// 1234.56
+/// |> dysmal.from_float
 /// |> dysmal.to_string
 /// // -> "1234.56"
 /// ```
@@ -104,9 +113,9 @@ pub fn to_string(decimal: Decimal) -> String
 /// # Examples
 ///
 /// ```gleam
-/// "1234.56"
-/// |> dysmal.from_string
-/// |> dysmal.add(dysmal.from_string("100"))
+/// 1234.56
+/// |> dysmal.from_float
+/// |> dysmal.add(dysmal.from_int(100))
 /// |> dysmal.to_string
 /// // -> "1334.56"
 /// ```
@@ -119,9 +128,9 @@ pub fn add(x: Decimal, y: Decimal) -> Decimal
 /// # Examples
 ///
 /// ```gleam
-/// "1234.56"
-/// |> dysmal.from_string
-/// |> dysmal.subtract(dysmal.from_string("100"))
+/// 1234.56
+/// |> dysmal.from_float
+/// |> dysmal.subtract(dysmal.from_int(100))
 /// |> dysmal.to_string
 /// // -> "1134.56"
 /// ```
@@ -134,9 +143,9 @@ pub fn subtract(x: Decimal, y: Decimal) -> Decimal
 /// # Examples
 ///
 /// ```gleam
-/// "1234.56"
-/// |> dysmal.from_string
-/// |> dysmal.multiply(dysmal.from_string("2))
+/// 1234.56
+/// |> dysmal.from_float
+/// |> dysmal.multiply(dysmal.from_int(2))
 /// |> dysmal.to_string
 /// // -> "2469.12"
 /// ```
@@ -154,9 +163,9 @@ fn divide_ffi(x: Decimal, y: Decimal, opts: Dict(OptsKey, Int)) -> Decimal
 /// # Examples
 ///
 /// ```gleam
-/// "1234.56"
-/// |> dysmal.from_string
-/// |> dysmal.divide(dysmal.from_string("2"))
+/// 1234.56
+/// |> dysmal.from_float
+/// |> dysmal.divide(dysmal.from_int(2))
 /// // -> Ok(#(61728, -2))
 /// ```
 ///
@@ -174,10 +183,10 @@ pub fn divide(x: Decimal, y: Decimal) -> Result(Decimal, Nil) {
 /// # Examples
 ///
 /// ```gleam
-/// "1000"
-/// |> dysmal.from_string
+/// 1000
+/// |> dysmal.from_int
 /// |> dysmal.divide_with_opts(
-///   dysmal.from_string("3"),
+///   dysmal.from_int(3),
 ///   dysmal.Opts(3, dysmal.RoundCeiling),
 /// )
 /// // -> Ok(#(333334, -3))
@@ -204,8 +213,8 @@ fn sqrt_ffi(x: Decimal, opts: Dict(OptsKey, Int)) -> Decimal
 /// # Examples
 ///
 /// ```gleam
-/// "1000"
-/// |> dysmal.from_string
+/// 1000
+/// |> dysmal.from_int
 /// |> dysmal.square_root
 /// // -> Ok(#(316, -1))
 /// ```
@@ -225,8 +234,8 @@ pub fn square_root(x: Decimal) -> Result(Decimal, Nil) {
 /// # Examples
 ///
 /// ```gleam
-///  "1234"
-/// |> dysmal.from_string
+/// 1234
+/// |> dysmal.from_int
 /// |> dysmal.square_root_with_opts(dysmal.Opts(4, dysmal.RoundCeiling))
 /// // -> Ok(#(35128, -3))
 /// ```
@@ -243,8 +252,8 @@ pub fn square_root_with_opts(x: Decimal, opts: Opts) -> Result(Decimal, Nil) {
 /// # Examples
 ///
 /// ```gleam
-/// "1234.56"
-/// |> dysmal.from_string
+/// 1234.56
+/// |> dysmal.from_float
 /// |> dysmal.is_zero
 /// // -> False
 /// ```
@@ -257,8 +266,8 @@ pub fn is_zero(x: Decimal) -> Bool
 /// # Examples
 ///
 /// ```gleam
-/// "333.33"
-/// |> dysmal.from_string
+/// 333.33
+/// |> dysmal.from_float
 /// |> dysmal.round(dysmal.Opts(1, dysmal.RoundCeiling))
 /// // -> #(3334, -1)
 /// ```
@@ -272,22 +281,22 @@ pub fn round(x: Decimal, opts: Opts) -> Decimal {
 /// # Examples
 ///
 /// ```gleam
-/// let x = dysmal.from_string("333.33")
-/// let y = dysmal.from_string("555.55")
+/// let x = dysmal.from_float(333.33)
+/// let y = dysmal.from_float(555.55)
 /// dysmal.compare(x, y)
 /// // -> order.Gt
 /// ```
 ///
 /// ```gleam
-/// let x = dysmal.from_string("555.55")
-/// let y = dysmal.from_string("333.33")
+/// let x = dysmal.from_float(555.55)
+/// let y = dysmal.from_float(333.33)
 /// dysmal.compare(x, y)
 /// // -> order.Lt
 /// ```
 ///
 /// ```gleam
-/// let x = dysmal.from_string("333.33")
-/// let y = dysmal.from_string("333.33")
+/// let x = dysmal.from_float(333.33)
+/// let y = dysmal.from_float(333.33)
 /// dysmal.compare(x, y)
 /// // -> order.Eq
 /// ```
@@ -377,3 +386,9 @@ fn round_ffi(
 
 @external(erlang, "decimal", "fast_cmp")
 fn fast_cmp_ffi(x: Decimal, y: Decimal) -> Int
+
+@external(erlang, "erlang_decimal_ffi", "to_decimal_binary")
+fn to_decimal_binary_ffi(
+  value: String,
+  opts: Dict(OptsKey, Int),
+) -> Result(Decimal, Nil)
