@@ -215,3 +215,19 @@ pub fn compare_test() {
   let f = dysmal.from_float(333.33)
   assert dysmal.compare(e, f) == order.Eq
 }
+
+pub fn compare_with_opts_test() {
+  let opts = dysmal.Opts(1, dysmal.RoundCeiling)
+
+  let a = dysmal.from_float(333.3333)
+  let b = dysmal.from_float(555.5555)
+  assert dysmal.compare_with_opts(a, b, opts) == order.Lt
+
+  let c = dysmal.from_float(555.5555)
+  let d = dysmal.from_float(333.3333)
+  assert dysmal.compare_with_opts(c, d, opts) == order.Gt
+
+  let e = dysmal.from_float(333.3999)
+  let f = dysmal.from_float(333.3888)
+  assert dysmal.compare_with_opts(e, f, opts) == order.Eq
+}

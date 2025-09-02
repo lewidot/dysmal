@@ -309,6 +309,42 @@ pub fn compare(x: Decimal, y: Decimal) -> order.Order {
   }
 }
 
+/// Compares two Decimals with precision and rounding options, returning an order.
+///
+/// # Examples
+///
+/// ```gleam
+/// let x = dysmal.from_float(333.3333)
+/// let y = dysmal.from_float(555.5555)
+/// let opts = dysmal.Opts(1, dysmal.RoundCeiling)
+/// dysmal.compare_with_opts(x, y, opts)
+/// // -> order.Gt
+/// ```
+///
+/// ```gleam
+/// let x = dysmal.from_float(555.5555)
+/// let y = dysmal.from_float(333.3333)
+/// let opts = dysmal.Opts(1, dysmal.RoundCeiling)
+/// dysmal.compare_with_opts(x, y, opts)
+/// // -> order.Lt
+/// ```
+///
+/// ```gleam
+/// let x = dysmal.from_float(333.3999)
+/// let y = dysmal.from_float(333.3888)
+/// let opts = dysmal.Opts(1, dysmal.RoundCeiling)
+/// dysmal.compare_with_opts(x, y, opts)
+/// // -> order.Eq
+/// ```
+///
+pub fn compare_with_opts(x: Decimal, y: Decimal, opts: Opts) -> order.Order {
+  case cmp_ffi(x, y, opts_to_dict(opts)) {
+    1 -> order.Gt
+    -1 -> order.Lt
+    _ -> order.Eq
+  }
+}
+
 // Types
 
 /// Representation of a decimal number.
@@ -386,6 +422,9 @@ fn round_ffi(
 
 @external(erlang, "decimal", "fast_cmp")
 fn fast_cmp_ffi(x: Decimal, y: Decimal) -> Int
+
+@external(erlang, "decimal", "cmp")
+fn cmp_ffi(x: Decimal, y: Decimal, opts: Dict(OptsKey, Int)) -> Int
 
 @external(erlang, "erlang_decimal_ffi", "to_decimal_binary")
 fn to_decimal_binary_ffi(
