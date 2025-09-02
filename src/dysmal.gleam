@@ -368,6 +368,21 @@ pub fn compare_with_opts(x: Decimal, y: Decimal, opts: Opts) -> order.Order {
 @external(erlang, "decimal", "abs")
 pub fn absolute_value(x: Decimal) -> Decimal
 
+/// Returns the negative of a Decimal.
+///
+/// # Examples
+///
+/// ```gleam
+/// 1234.56
+/// |> dysmal.from_float
+/// |> dysmal.negate
+/// |> dysmal.to_string
+/// // -> "-1234.56"
+/// ```
+///
+@external(erlang, "decimal", "minus")
+pub fn negate(x: Decimal) -> Decimal
+
 // Types
 
 /// Representation of a decimal number.

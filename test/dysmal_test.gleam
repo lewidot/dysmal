@@ -251,3 +251,13 @@ pub fn negative_absolute_value_test() {
 
   assert result == "1234.56"
 }
+
+pub fn negate_test() {
+  let result =
+    1234.56
+    |> dysmal.from_float
+    |> dysmal.negate
+    |> dysmal.to_string
+
+  assert result == "-1234.56"
+}
