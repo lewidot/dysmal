@@ -231,3 +231,23 @@ pub fn compare_with_opts_test() {
   let f = dysmal.from_float(333.3888)
   assert dysmal.compare_with_opts(e, f, opts) == order.Eq
 }
+
+pub fn absolute_value_test() {
+  let result =
+    1234.56
+    |> dysmal.from_float
+    |> dysmal.absolute_value
+    |> dysmal.to_string
+
+  assert result == "1234.56"
+}
+
+pub fn negative_absolute_value_test() {
+  let result =
+    -1234.56
+    |> dysmal.from_float
+    |> dysmal.absolute_value
+    |> dysmal.to_string
+
+  assert result == "1234.56"
+}
